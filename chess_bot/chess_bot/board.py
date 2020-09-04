@@ -7,6 +7,11 @@ class Board:
         self.game = game
         self.board = self.empty_board
 
+    def copy(self):
+        new_board = Board(self.game)
+        new_board.board = self.board
+        return new_board
+
     @property
     def pieces(self) -> list:
         pieces = []
@@ -46,7 +51,7 @@ class Board:
                 x += 2
                 continue
 
-            piece = pieces[piece_char](self.game, self.get_let(piece_x), piece_y, piece_color)
+            piece = pieces[piece_char](self, self.get_let(piece_x), piece_y, piece_color)
 
             _board[piece_y][piece_x] = piece
             x += 2
@@ -60,23 +65,51 @@ class Board:
         return ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'][x]
 
     def tile(self, x, y, piece=None):
-        xnum = self.get_x(x)
+        if type(x) == str:
+            xnum = self.get_x(x)
+        else:
+            xnum = x
 
         if piece is None:
             return self.board[y][xnum]
         else:
             self.baord[y][xnum] = piece
 
-    def __repr__(self):
+    def all_moves(self, color):
+        moves = []
+
+        for piece in self.pieces:
+            if piece.color != color:
+                continue
+
+            moves += piece.all_moves()
+
+    def str_pos(self, x, y):
+        if type(x) != str:
+            x = self.get_let(x)
+
+        return f"{x}{y}"
+
+    def tile_exists(self, x, y):
+        if x >= 0 and x < 8 and y >= 0 and y < 8:
+            return True
+        return False
+
+    def __repr__(self, highlight=None):
         output = ""
 
         for y in range(8):
             for x in range(8):
                 piece = self.board[y][x]
                 if piece is None:
-                    output += "|  "
-                    continue
-                output += f"|{piece.color.upper()[:1]}{piece.char.upper()}"
+                    new = "  "
+                else:
+                    new = f"{piece.color.upper()[:1]}{piece.char.upper()}"
+
+                if highlight is not None and self.str_pos(x, y) in highlight:
+                    new = f"\033[30;42m{new}\033[0;0m"
+
+                output += "|" + new
             output += "|\n"
 
         return output
@@ -84,4 +117,4 @@ class Board:
 if __name__ == "__main__":
     board = Board(None)
     board.load(open('board.txt'))
-    print(board)
+    print(board.__repr__())

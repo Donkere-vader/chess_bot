@@ -11,9 +11,13 @@ class ChessBot:
     def calculate_next_move(self):
         pass
 
-    def get_best_move(self, on_turn):
-        pass
+    def best_move(self):
+        all_moves = self.board.get_all_moves(self.on_turn)
 
 if __name__ == "__main__":
     chess_bot = ChessBot(5, color.WHITE)
     chess_bot.board.load(open('board.txt'))
+    print(chess_bot.board.pieces[16])
+    moves = chess_bot.board.pieces[16].all_moves()
+    print(moves)
+    print(chess_bot.board.__repr__(highlight=moves))
