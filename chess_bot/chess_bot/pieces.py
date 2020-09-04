@@ -120,7 +120,7 @@ class Pawn(Piece):
         # check in front
         _x = xnum
         for i in range(1, (2 if self.moved else 3)):
-            if self.color == color.WHITE:
+            if self.color == color.BLACK:
                 i = i * -1
             _y = ynum + i
 
@@ -144,8 +144,8 @@ class Pawn(Piece):
 
     @property
     def moved(self):
-        if self.color == color.WHITE and self.y == 6:
+        if self.color == color.WHITE and self.y == 1:
             return False
-        if self.color == color.BLACK and self.y == 1:
+        if self.color == color.BLACK and self.y == 6:
             return False
         return True

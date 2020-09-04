@@ -19,7 +19,8 @@ if __name__ == "__main__":
     chess_bot.board.load(open('board.txt'))
     #chess_bot.calculate_next_move()
 
-    print(chess_bot.board.pieces[18])
-    moves = chess_bot.board.pieces[18].all_moves()
+    print(chess_bot.board.pieces[10])
+    moves = chess_bot.board.pieces[10].all_moves()
     print(moves)
-    print(chess_bot.board.__repr__(highlight=moves))
+    h = [i[2:] for i in moves]
+    print(chess_bot.board.__repr__(highlight=h))
