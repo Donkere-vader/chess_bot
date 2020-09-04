@@ -130,7 +130,7 @@ class Pawn(Piece):
                 break
 
         # check diagonals
-        _y = ynum + (1 if self.color == color.BLACK else -1)
+        _y = ynum + (1 if self.color == color.WHITE else -1)
 
         for i in [-1, 1]:
             _x = xnum + i

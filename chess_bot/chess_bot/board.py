@@ -76,6 +76,22 @@ class Board:
         else:
             self.baord[y][xnum] = piece
 
+    def move(self, move: str):
+        frm = move[:2]
+        to = move[2:]
+
+        frm_x = self.get_x(frm[0])
+        frm_y = int(frm[1])
+        to_x = self.get_x(to[0])
+        to_y = int(to[1])
+
+        piece = self.tile(frm_x, frm_y)
+
+        self.board[to_y][to_x] = piece
+        self.board[frm_y][frm_x] = None
+        piece.x = to_x
+        piece.y = to_y
+
     def all_moves(self):
         moves = []
 
