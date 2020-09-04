@@ -1,17 +1,38 @@
 from pieces import color, King, Queen, Rook, Knight, Bishop, Pawn
+from copy import deepcopy
 
 class Board:
     empty_board = [[None for i in range(8)] for i in range(8)]
 
-    def __init__(self, game):
+    def __init__(self, game, on_turn):
         self.game = game
-        self.board = self.empty_board
-        self.on_turn = color.WHITE
+        self.board = deepcopy(self.empty_board)
+        self.on_turn = on_turn
+        self.children = []
+        self.value = None
 
     def copy(self):
-        new_board = Board(self.game)
-        new_board.board = self.board
+        new_board = Board(self.game, self.on_turn)
+
+        new_board.board = deepcopy(self.empty_board)
+        for piece in self.pieces:
+            new_piece = piece.__class__(new_board, piece.x, piece.y, piece.color)
+            new_board.board[new_piece.y][self.get_x(new_piece.x)] = new_piece
+
         return new_board
+
+    def calc_value(self, color) -> int:
+        total_own_points = 0
+        total_other_points = 0
+        for piece in self.pieces:
+            possible_moves = len(piece.all_moves())
+            total_piece_value = possible_moves * piece.value
+            if color == color:
+                total_own_points += total_piece_value
+            else:
+                total_other_points += total_piece_value
+
+        self.value = total_own_points - total_other_points
 
     @property
     def pieces(self) -> list:
@@ -29,7 +50,7 @@ class Board:
     def loads(self, board_str):
         board_lst = list(board_str.replace('\n', ''))
 
-        _board = self.empty_board
+        _board = deepcopy(self.empty_board)
 
         pieces = {
             "k": King,
@@ -89,8 +110,11 @@ class Board:
 
         self.board[to_y][to_x] = piece
         self.board[frm_y][frm_x] = None
-        piece.x = to_x
+        piece.x = self.get_let(to_x)
         piece.y = to_y
+
+        self.on_turn = color.BLACK if self.on_turn == color.WHITE else color.WHITE
+        self.made_move = move
 
     def all_moves(self):
         moves = []
