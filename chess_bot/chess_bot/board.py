@@ -6,6 +6,7 @@ class Board:
     def __init__(self, game):
         self.game = game
         self.board = self.empty_board
+        self.on_turn = color.WHITE
 
     def copy(self):
         new_board = Board(self.game)
@@ -75,14 +76,16 @@ class Board:
         else:
             self.baord[y][xnum] = piece
 
-    def all_moves(self, color):
+    def all_moves(self):
         moves = []
 
         for piece in self.pieces:
-            if piece.color != color:
+            if piece.color != self.on_turn:
                 continue
 
             moves += piece.all_moves()
+
+        return moves
 
     def str_pos(self, x, y):
         if type(x) != str:
@@ -98,7 +101,7 @@ class Board:
     def __repr__(self, highlight=None):
         output = ""
 
-        for y in range(8):
+        for y in reversed(range(8)):
             for x in range(8):
                 piece = self.board[y][x]
                 if piece is None:

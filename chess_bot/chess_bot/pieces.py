@@ -43,9 +43,9 @@ class Piece:
                 if self.board.tile_exists(_x, _y):
                     tile = self.board.tile(_x, _y)
                     if tile is None:
-                        moves.append(self.board.str_pos(_x, _y))
+                        moves.append(f"{self.board.str_pos(self.x, self.y)}{self.board.str_pos(_x, _y)}")
                     elif tile.color != self.color:
-                        moves.append(self.board.str_pos(_x, _y))
+                        moves.append(f"{self.board.str_pos(self.x, self.y)}{self.board.str_pos(_x, _y)}")
                         break
                     elif tile.color == self.color:
                         break
@@ -99,9 +99,9 @@ class Knight(Piece):
             if self.board.tile_exists(_x, _y):
                 tile = self.board.tile(_x, _y)
                 if tile is None:
-                    moves.append(self.board.str_pos(_x, _y))
+                    moves.append(f"{self.board.str_pos(self.x, self.y)}{self.board.str_pos(_x, _y)}")
                 elif tile.color != self.color:
-                    moves.append(self.board.str_pos(_x, _y))
+                    moves.append(f"{self.board.str_pos(self.x, self.y)}{self.board.str_pos(_x, _y)}")
                     continue
                 elif tile.color == self.color:
                     continue
@@ -125,7 +125,7 @@ class Pawn(Piece):
             _y = ynum + i
 
             if self.board.tile(_x, _y) is None:
-                moves.append(self.board.str_pos(_x, _y))
+                moves.append(f"{self.board.str_pos(self.x, self.y)}{self.board.str_pos(_x, _y)}")
             else:
                 break
 
@@ -138,7 +138,7 @@ class Pawn(Piece):
                 tile = self.board.tile(_x, _y)
                 if tile is not None:
                     if tile.color != self.color:
-                        moves.append(self.board.str_pos(_x, _y))
+                        moves.append(f"{self.board.str_pos(self.x, self.y)}{self.board.str_pos(_x, _y)}")
 
         return moves
 
